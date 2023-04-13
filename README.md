@@ -15,18 +15,23 @@ Imagens do programa em funcionamento:
 
 **Tela de introdução**
 Apresentação do curso e dos componentes do grupo.
+
 ![image](https://user-images.githubusercontent.com/104435149/231748262-b5bdb5dc-0d55-42a5-a4bc-d381325cb8f3.png)
 
 **Tela de informações básicas do usuário**
+
 ![image](https://user-images.githubusercontent.com/104435149/231748493-cc1f26ff-82a5-4c60-8252-a91e95799ff6.png)
 
 **Tela de direcionamento inicial**
 Abrir ou criar um banco de dados
+
 ![image](https://user-images.githubusercontent.com/104435149/231748696-3d153a51-f676-4085-9ad4-11b9d9ea1fb4.png)
 
 Ao selecionar a opção de carregar um banco de dados, o sistema mostra os arquivos .txt que existem no diretório do programa.
+
 ![image](https://user-images.githubusercontent.com/104435149/231748802-861519fa-a886-4925-aed2-acec1e2e47e8.png)
 
 **Tela de opções básicas do banco**
 Nessa tela já podemos visualizar os relatórios básicos do banco
+
 ![image](https://user-images.githubusercontent.com/104435149/231748964-55d05870-d339-4353-b73c-7ebe79135f49.png)
