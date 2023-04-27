@@ -1,6 +1,16 @@
 import os
 from statistics import mode
 from collections import Counter
+import platform
+
+    
+def cls():
+    if platform.system() == "Linux":
+        os.system('clear')
+    else:
+        os.system('cls')
+
+    
     
 def Moda(dados=[],biblioteca=False):
     if len(dados) == 0:
@@ -55,8 +65,7 @@ def Ordenar_Decrescente(dados):
     return dados
     
 
-def cls():
-    os.system('clear')
+
 
 # dados = [1,2,3,4,5,6,7,8,9,10] # *********** Para fazer Testes **************
 

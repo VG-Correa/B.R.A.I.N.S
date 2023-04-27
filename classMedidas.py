@@ -1,7 +1,6 @@
 
 # ========================= BIBLIOTECAS ===============================
 import numpy as np 
-from scipy import stats
 
 # ======================== IMPORTS LOCAIS =============================
 import defs1 as df1
@@ -10,7 +9,6 @@ import defs3 as df3
 from color import color
 from datetime import datetime
 
-# dados = [0', 2, 2, 2, 2, 3, 4,4,4, 4, 5, 6, 7, 10, 11, 20] # *********** Para fazer Testes **************
 
 # Criando uma classe/objeto para retornar todas as medidas
 class Medidas: 
@@ -26,10 +24,12 @@ class Medidas:
         self.quartil_3 = self.quartils[2]
         self.mediana = self.quartil_2
         self.moda = "Amodal"
+        self.arquivo = ''
 
         if len(self.dados) > 0:
             self.Calcular()
 
+    # Função para salvar o TXT
     def Salvar(self):
         texto = ""
         for text in self.dados:
@@ -38,24 +38,25 @@ class Medidas:
         if self.Titulo == "":
             self.Titulo == "Banco de Dados " + str(datetime.now())
         
-        arquivo = open(self.Titulo+'.txt',"w")
-        arquivo.writelines(texto)
+        with open(self.Titulo+'.txt',"w") as arquivo:
+            arquivo.writelines(texto)
+            self.arquivo = self.Titulo+'.txt'
+            
         self.Calcular()
-        
+
+    # Função para calcular as medidas toda vez q a função for chamada
     def Calcular(self):
         self.media = df1.Media(self.dados, self.biblioteca)
         self.quartils = df2.Quartils(self.dados,self.biblioteca)
-        print(self.quartils)
         self.quartil_1 = self.quartils[0]
         self.quartil_2 = self.quartils[1]
         self.quartil_3 = self.quartils[2]
         self.mediana = self.quartil_2
         self.moda = str(df3.Moda(self.dados,self.biblioteca)).strip('[]')
 
+    # Função para mostrar o resultado personalizado em forma de tabela colorida
     def Show_Medidas(self, colorido = True):
-
         div = "="*30
-
         if colorido:
             return f"""            
 {color(self.Titulo, 'verde', negrito=True)[:30]:^45} 
@@ -68,8 +69,8 @@ class Medidas:
 {color(div,'azul',negrito=True)}
 Fonte: {self.Fonte}\n""" 
 
-
-        else:
+        # Imprime os resultados em um txt, de forma personalizada em forma de tabela sem cor
+        else:   
             div = "="*45
             return f'''
 {self.Titulo[:30]:^45}
@@ -81,4 +82,3 @@ Fonte: {self.Fonte}\n"""
 {"Moda: ":<30} | {self.moda} 
 {div}
 Fonte: {self.Fonte}'''
-

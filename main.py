@@ -1,42 +1,14 @@
-# https://pt.dreamstime.com/stock-music-sound-effect/beep.html
-# from playsound import playsound
-# playsound('bip.mp3')
-
-
-'''
-OK - Cabeçálho (FATEC, Nomes dos programadores, nome professor, etc)
-OK - Colocar fonte nos dados existentes
-OK - Título
-OK - Calculo de quartil (Audrey) com biblioteca*
-OK - Inserir bibliocate no ClassMedidas
-OK - Cálculo da Média (Caio) com e sem biblioteca*
-OK - Def Calcular (Audrey)
-OK - Cálculo de Moda ( Victor) COM biblioteca*
-OK - Usuário entrar com os dados que quiser(open(input("Digite o nome do arquivo que deseja abrir: " - txt)+txt)) ou
-OK - Usuário fazer input da fonte se ele criar o arquivo de dados (digita valor por valor)
-OK - Verificação se todos os dados são numéricos Tipo .isdigit() dados.isdigit()
-OK - Amodal, Bimodal, MultiModal
-OK - Acrescentar opção de programa com biblioteca nympy
-OK - Fazer - Mostrar Dados (Criar banco de dados)(Caio)
-OK - Editar dados (Todas as 5 funções desse menu)  - APAGAR BANCO DE DADOS
-OK - Fazer try except (Forçar erros no final da programação)
-
-
-
-- Considerações "Análise descritiva no "mostrar dados e no arquivo txt"
-- Comentar o código 
-
-- Histograma
-
-'''
-
+import Menu_seleção
 from menu import *
 import os
-import time
+import time                     # Biblioteca time que fornece várias funções relacionadas ao tempo
 from classMedidas import *      # *Importando todas as funções da classe "Medidas"
-from color import color
+from color import color         # Importa a função color do arquivo color.py
+import sys
+import platform
 
 
+# Função sleep que recebe uma mensagem e um tempo em segundos
 def sleep(mensagem,tempo):
 
     while tempo > 0:
@@ -46,21 +18,25 @@ def sleep(mensagem,tempo):
         time.sleep(0.5)
         cls()
 
+# Função cls que limpa a tela do terminal
 def cls():
-    os.system('clear')
+    if platform.system() == "Linux":
+        os.system('clear')
+    else:
+        os.system('cls')
 
-
+# A classe MENU possui um construtor __init__() que define os atributos
 class Menu:
-    def __init__(self,cabeçalho=""):
+    def __init__(self,biblioteca=False):
         self.nome_cliente = ""
-        self.cabeçalho = """
+        self.cabeçalho = """\033[36m
 ██████╗    ██████╗     █████╗    ██╗   ███╗   ██╗   ███████╗
 ██╔══██╗   ██╔══██╗   ██╔══██╗   ██║   ████╗  ██║   ██╔════╝
 ██████╔╝   ██████╔╝   ███████║   ██║   ██╔██╗ ██║   ███████╗
 ██╔══██╗   ██╔══██╗   ██╔══██║   ██║   ██║╚██╗██║   ╚════██║
 ██████╔╝██╗██║  ██║██╗██║  ██║██╗██║██╗██║ ╚████║██╗███████║
-╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝
-Brilliantly Robust Analysis and Intelligence Network System"""
+╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝\033[0;0m
+\033[34mBrilliantly Robust Analysis and Intelligence Network System\033[0;0m"""
         
         self.FATEC = """
 ███████╗ █████╗ ████████╗███████╗ ██████╗       
@@ -101,25 +77,26 @@ Disciplina: Estatística"""
  ╚████╔╝ ██║╚██████╗   ██║   ╚██████╔╝██║  ██║    ╚██████╗██╗    
   ╚═══╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝     ╚═════╝╚═╝"""
 
-        self.dados = Medidas
-        self.biblioteca = False
+        self.dados = Medidas    
+        self.biblioteca = biblioteca
+        self.select = Menu_seleção.Menu_seleção(cabeçalho=self.cabeçalho)
 
+    # Função de Tela de Apresentação
     def Tela_Apresentação(self):
         cabeçalho = self.FATEC
 
-        options("Oferecimento: \n" + cabeçalho,["Continuar..."])
-        options("Programadores: \n" + self.programadores,["Continuar..."])
+        self.select.options(cabeçalho=cabeçalho,opções=["Continuar..."])
+        self.select.options(cabeçalho="Programadores: \n" + self.programadores,opções=["Continuar..."])
         self.Tela_Intro()
 
-
-
+    # Função que apresenta um menu com opções para selecionar ou criar bancos de dados.
     def Tela_Intro(self):
         if self.nome_cliente == "":
-            cabeçalho = self.cabeçalho + "\n\nMuito bem vindo ao nosso sistema, quer informar seu nome ?\n"
+            descrição = "\nMuito bem vindo ao nosso sistema, quer informar seu nome ?"
             
             opt = ["Informar meu nome","Continuar como anônimo","Sair"]
 
-            opt = options(cabeçalho,opt)
+            opt = self.select.options(descrição=descrição,opções=opt)
 
             if opt == 2:
                 self.Exit()
@@ -128,10 +105,10 @@ Disciplina: Estatística"""
             elif opt == 0:
                 self.set_nome_usuario()
 
-        cabeçalho = self.cabeçalho + f"\n\nOlá, {self.nome_cliente}\nO que deseja fazer:\n"
+        descrição = f"Olá, {self.nome_cliente}\nO que deseja fazer:"
 
         opt = ["Selecionar Banco de Dados","Criar Banco de Dados","Voltar do início","Sair"]
-        opt = options(cabeçalho,opt)
+        opt = self.select.options(descrição=descrição,opções=opt)
         
         if opt == 0: # Seleciona o banco de dados
             self.Tela_Selecionar_banco_de_dados()
@@ -149,17 +126,20 @@ Disciplina: Estatística"""
     # Menu > Selecione banco de dados
     def Tela_Selecionar_banco_de_dados(self):
         cls()
-        opções = self.Get_ArquivosNoDiretorio() + ['Voltar']
-        opt = opções[options(self.cabeçalho + "\n\nSelecione o banco de dados:", opções)]
+
+        opt = self.Get_ArquivosNoDiretorio() + ['Voltar']
+        opt = opt[self.select.options(descrição="Selecione o banco de dados:", opções=opt)]
         
         try:
+            cls()
             with open(opt,'r') as dados:
                 
                 dados = [float(dado.rstrip()) for dado in dados.readlines()]
           
                 self.dados = Medidas(dados,self.biblioteca)
+                self.dados.arquivo = opt
                 opt = opt.strip(".txt")
-                titulo = input(self.cabeçalho + f"\n\n\nInsira o título do seu relatório de dados ou apenas enter para manter {opt}: ").upper()
+                titulo = input(self.cabeçalho + f"\n\n\nInsira o título do seu relatório de dados ou apenas enter para manter {opt}: \n").upper()
 
                 if titulo == "":
                     titulo = opt.strip(".txt")
@@ -167,38 +147,40 @@ Disciplina: Estatística"""
                 self.dados.Titulo = titulo
                 
                 cls()
-                self.dados.Fonte = input(self.cabeçalho + "\n\n\nInsira a fonte dos dados: \n ")
+                self.dados.Fonte = input(self.cabeçalho + "\n\n\nInsira a fonte dos dados:\n")
                 cls()
+
         except:
             if opt == "Voltar":
                 self.Tela_Intro()
             else:
                 sleep("Banco de dados não aceito",5)
                 self.Tela_Selecionar_banco_de_dados()
+        cls()
         self.Tela_opções_dados()
 
     def Tela_opções_dados(self):
         cls()
-        cabeçalho = self.cabeçalho + f"\n\n\nÁrea do Banco de dados: {self.dados.Titulo}\n\nSelecione a opção desejada:"
-        opt = ["Mostrar Dados!!!","Medidas Gerais","Baixar Resultados","Histograma!!!","Editar Banco de dados","Voltar"]
-        opt = options(cabeçalho,opt)
+        descrição = f"Área do Banco de dados: {self.dados.Titulo}\n\nSelecione a opção desejada:"
+        opt = ["Mostrar Dados","Medidas Gerais","Baixar Resultados","Histograma","Editar Banco de dados","Voltar"]
+        opt = self.select.options(descrição=descrição,opções=opt)
 
         if opt == 0: # Mostrar Dados
-
             self.Mostrar_dados()
             self.Tela_opções_dados()
             
         elif opt == 1: # Medidas Gerals
+            cls()
             print(self.cabeçalho)
             print(self.dados.Show_Medidas())
             print("\nPressione Enter para continuar...")
             input()
             
             # Função da classe Medidas para mostrar os dados de forma organizada
-
             self.Tela_opções_dados()
 
         elif opt == 2: # Baixa os resultados
+            cls()
             print(self.cabeçalho + "\n")
             nome_arquivo = input("Qual o nome do arquivo que deseja salvar:\n").strip('.txt') + ".txt"
 
@@ -208,30 +190,31 @@ Disciplina: Estatística"""
 
             novo_arquivo.close()
             sleep(f"Arquvio {nome_arquivo} criado com sucesso",10)
-
             self.Tela_opções_dados()
 
-        elif opt == 3:
+        elif opt == 3:  # Histograma
             sleep("Em processo de Implementação...",5)
             self.Tela_opções_dados()
 
-        elif opt == 4:
+        elif opt == 4:  # Editar Banco de dados
             self.Tela_Editar_Banco_Dados()
 
-        elif opt == 5:
+        elif opt == 5: # Voltar
             self.Tela_Selecionar_banco_de_dados()
 
+    # Busca de arquivos no Diretório
     def Get_ArquivosNoDiretorio(self) -> list:
         diretorio = os.getcwd()
         lista_arquivos = os.listdir(diretorio)
         lista_arquivos = [arquivo for arquivo in lista_arquivos if arquivo.endswith('.txt')]
         return lista_arquivos
 
+    # Função para inserir nome do usuário e validar o mesmo
     def set_nome_usuario(self):
         self.nome_cliente = input(self.cabeçalho + "\n\n\n Digite seu nome:\n\n")
-        cabeçalho = self.cabeçalho + f"\n\n\nSeu nome é: {self.nome_cliente}?"
+        descrição = f"\n\n\nSeu nome é: {self.nome_cliente}?"
         opt = ["Sim","Corrigir","Sair"]
-        opt = options(cabeçalho,opt)
+        opt = self.select.options(descrição=descrição,opções=opt)
         cls()
         if opt == 2:
             self.Exit()
@@ -240,37 +223,37 @@ Disciplina: Estatística"""
         else:
             return 0
 
+    # Função para o usuário criar seu próprio banco de dados
     def Tela_Criar_Banco_dados(self):
-        cabeçalho = self.cabeçalho + "\n\n\nPara criar um novo banco de dados, por favor, insira o Título:\n"
-        Novo_Banco = Medidas([],biblioteca=self.biblioteca)
-        Novo_Banco.Titulo = input(cabeçalho).upper()
-        Novo_Banco.Titulo = Novo_Banco.Titulo.strip(".txt")
         cls()
+        while True:
+            cabeçalho = self.cabeçalho + "\n\n\nPara criar um novo banco de dados, por favor, insira o nome do banco:\n"
+            titulo =  input(cabeçalho).upper()
+            if titulo == "":
+                sleep(self.cabeçalho + "\n\n\nO Banco precisa de um nome!!",5)
+                continue
+            else:
+                break
 
-        # ================================================== ARRUMAR ============================================================
-        # Já na criação do banco de dados pelo usuário >> Cria o TXT >> Adiciona os valores >> Diz qual é a fonte >> Salva
-        # sleep(self.cabeçalho + "\n\n\nAgora vamos inserir os valores do seu banco de dados...",5)
-        # resp = ""
-        # while not resp.isalpha():
-        #     print(self.cabeçalho + "\n\n\nDigite o valor a ser inserido no banco de dados, em seguida aperte ENTER para continuar... OU pressione qualquer letra para encerrar a inserção de valores no banco de dados: ")
-        #     resp = input()
-
-        #     if resp.isalpha():
-        #         break
-
-        #     self.dados.dados.append(resp)
-        #     self.dados.Salvar() 
-        # =======================================================================================================================
+        Novo_Banco = Medidas([],biblioteca=self.biblioteca)
+        Novo_Banco.Titulo = titulo
+        Novo_Banco.Titulo = Novo_Banco.Titulo.strip(".txt")
+        Novo_Banco.arquivo = Novo_Banco.Titulo + '.txt'
+        cls()
         cabeçalho = self.cabeçalho + "\n\n\nAgora insira a Fonte dos dados:\n"
         Novo_Banco.Fonte = input(cabeçalho).upper()
         self.dados = Novo_Banco
+
+        with open(self.dados.arquivo,'w') as arquivo:
+            pass            
         self.Tela_opções_dados()
 
+    # Função para Editar banco de dados
     def Tela_Editar_Banco_Dados(self):
-        cabeçalho = self.cabeçalho + f"\n\n\nTela de edição de dados\nBanco: {self.dados.Titulo}\n\nSelecione a opção desejada:\n"
+        descrição = f"Tela de edição de dados\nBanco: {self.dados.Titulo}\n\nSelecione a opção desejada:"
 
-        opt = ["Mostrar dados!!!","Adicionar Dados","Excluir Dados", "Alterar Título ou Fonte","Salvar como","Apagar Banco de dados!!!","Voltar"]
-        opt = options(cabeçalho,opt)
+        opt = ["Mostrar dados","Adicionar Dados","Excluir Dados", "Alterar Título ou Fonte","Salvar como","Apagar Banco de dados","Voltar"]
+        opt = self.select.options(descrição=descrição,opções=opt)
         
         if opt == 0: # Mostrar dados
             self.Mostrar_dados()
@@ -281,10 +264,8 @@ Disciplina: Estatística"""
             self.Tela_Editar_Banco_Dados()
 
         elif opt == 2: # Excluir Dados
-
             self.Excluir_dados()
             self.Tela_Editar_Banco_Dados()
-            pass
 
         elif opt == 3: # Alterar Título ou Fonte
             self.Alterar_Titulo() 
@@ -292,15 +273,16 @@ Disciplina: Estatística"""
             
         elif opt == 4: # Salvar       
             self.Salvar_como()
-            
             self.Tela_Editar_Banco_Dados()
 
         elif opt == 5: # Apagar Banco de dados
-            self.Tela_Editar_Banco_Dados()
-            pass
+            self.Excluir_Banco()
+            self.Tela_Intro()
+            
         elif opt == 6: # Voltar
             self.Tela_opções_dados()
 
+    # Adicionar dados no banco de dados e fazer verificação se são caracteres numéricos
     def Adicionar_dados(self):
         resp = ""
         while not resp.isalpha():
@@ -310,10 +292,10 @@ Disciplina: Estatística"""
 
             if resp.isalpha() or resp == "":
                 break
-
             self.dados.dados.append(int(resp))
-            self.dados.Salvar()         
+            self.dados.Salvar() 
 
+    # Função para alterar o título do banco de dados
     def Alterar_Titulo(self):
         cls()
         self.dados.Titulo = input(self.cabeçalho + "\n\n\nInsira o título dos dados: \n ").upper()
@@ -322,6 +304,7 @@ Disciplina: Estatística"""
         cls()
         sleep(self.cabeçalho + "\n\n\nDados alterados com sucesso!",5)   
 
+    # Função para o usuário salvar o resultado das medidas gerais em um TXT
     def Salvar_como(self):
         cls()
 
@@ -332,15 +315,14 @@ Disciplina: Estatística"""
             self.dados.Titulo = titulo.strip('.txt')
             self.dados.Salvar()
 
-    def Excluir_dados(self):
-        
+    # Função para excluir itens individualmente, um a um, que estão dentro do banco de dados
+    def Excluir_dados(self):        
         cabeçalho = self.cabeçalho + "\n\n\nSelecione o dado a ser excluído:"
         item_excluido = ""
 
         while True:
-
             opt = ['Voltar'] +  self.dados.dados
-            opt = options(cabeçalho,opt)
+            opt = self.select.options(opções=opt)
 
             if opt == 0:
                 break
@@ -350,9 +332,9 @@ Disciplina: Estatística"""
             self.dados.dados.pop(opt-1)
             self.dados.Salvar()
 
+    # Função para exibir os dados personalizados para o usuário
     def Mostrar_dados(self):
         cls()
-
         if len(self.dados.dados) == 0:
             cabeçalho = self.cabeçalho + '\n\n\nO banco não possui informação para mostrar!!\n\nVoltando ao menu anterior'
             sleep(cabeçalho,5)
@@ -361,29 +343,40 @@ Disciplina: Estatística"""
         cabeçalho = self.cabeçalho + f'\n\n\nDados do banco: {self.dados.Titulo}\n\n'
         print(cabeçalho)
         dados = self.dados.dados
-
         maior = len(str(max(dados))) + 2
-
         limite = 10
-
         for index, numero in enumerate(dados):
             if index+1 <= limite:
-
                 print(f'{numero:^{maior}}',end='|')
-
             else:
                 # print('a')
                 print('')
                 limite += 10
-                print(f'{numero:^{maior}}',end='|')
-        
+                print(f'{numero:^{maior}}',end='|')        
         input()
 
+    # Função para excluir o banco de dados que está no diretório
+    def Excluir_Banco(self):
+        arquivo = self.dados.arquivo
+        descrição = f"ATENÇÃO!!\nTem certeza que deseja excluir o banco de dados: {arquivo}?\n"
+        
+        opt = ['Não','Sim']
+        opt = self.select.options(descrição=descrição,opções=opt)
+        
+        if opt == 1:
+            diretorio = os.getcwd()
+            caminho = os.path.join(diretorio,arquivo)
+            os.remove(caminho)
+            sleep(self.cabeçalho+f'\n\n\nBanco {arquivo} excluído com sucesso!',5)
+            self.Tela_Intro()
+        else:
+            self.Tela_Editar_Banco_Dados()
 
+    # Finalização do programa personalizado
     def Exit(self):
         cls()
-        print(color(f'\n>>> {self.nome_cliente}, Muito obrigado por usar o ','azul',negrito=True) + color('B.R.A.I.N.','verde',negrito=True) + color('!!!','azul',negrito=True))
+        sleep(color(f'\n>>> {self.nome_cliente}, Muito obrigado por usar o ','azul',negrito=True) + color('B.R.A.I.N.','verde',negrito=True) + color('!!!','azul',negrito=True),5)
         exit()
             
-meu_Menu = Menu("SYSTATICS")
+meu_Menu = Menu()
 meu_Menu.Tela_Apresentação()

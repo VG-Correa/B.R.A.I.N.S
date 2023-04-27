@@ -2,9 +2,14 @@ dados = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 
 import statistics
 import os
+import sys
+import platform
 
 def cls():
-    os.system('clear')
+    if platform.system() == "Linux":
+        os.system('clear')
+    else:
+        os.system('cls')
 
 def Media(dados,biblioteca):
     if len(dados) == 0:

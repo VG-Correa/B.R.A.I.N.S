@@ -1,7 +1,7 @@
 # https://pt.dreamstime.com/stock-music-sound-effect/beep.html
 # from playsound import playsound
 # playsound('bip.mp3')
-import Menu_seleção
+
 
 '''
 OK - Cabeçálho (FATEC, Nomes dos programadores, nome professor, etc)
@@ -48,6 +48,7 @@ def sleep(mensagem,tempo):
 
 def cls():
     os.system('clear')
+
 
 class Menu:
     def __init__(self,cabeçalho=""):
@@ -102,24 +103,23 @@ Disciplina: Estatística"""
 
         self.dados = Medidas
         self.biblioteca = False
-        self.select = Menu_seleção.Menu_seleção(cabeçalho=self.cabeçalho)
 
     def Tela_Apresentação(self):
         cabeçalho = self.FATEC
 
-        self.select.options(cabeçalho=cabeçalho,opções=["Continuar..."])
-        self.select.options(cabeçalho="Programadores: \n" + self.programadores,opções=["Continuar..."])
+        options("Oferecimento: \n" + cabeçalho,["Continuar..."])
+        options("Programadores: \n" + self.programadores,["Continuar..."])
         self.Tela_Intro()
+
+
 
     def Tela_Intro(self):
         if self.nome_cliente == "":
-            # cabeçalho = self.cabeçalho + "\n\nMuito bem vindo ao nosso sistema, quer informar seu nome ?\n"
-            descrição = "Muito bem vindo ao nosso sistema, quer informar seu nome ?"
+            cabeçalho = self.cabeçalho + "\n\nMuito bem vindo ao nosso sistema, quer informar seu nome ?\n"
             
             opt = ["Informar meu nome","Continuar como anônimo","Sair"]
 
-            # opt = options(cabeçalho,opt)
-            opt = self.select.options(descrição=descrição,opções=opt)
+            opt = options(cabeçalho,opt)
 
             if opt == 2:
                 self.Exit()
@@ -128,10 +128,10 @@ Disciplina: Estatística"""
             elif opt == 0:
                 self.set_nome_usuario()
 
-        descrição = f"Olá, {self.nome_cliente}\nO que deseja fazer:"
+        cabeçalho = self.cabeçalho + f"\n\nOlá, {self.nome_cliente}\nO que deseja fazer:\n"
 
         opt = ["Selecionar Banco de Dados","Criar Banco de Dados","Voltar do início","Sair"]
-        opt = self.select.options(descrição=descrição,opções=opt)
+        opt = options(cabeçalho,opt)
         
         if opt == 0: # Seleciona o banco de dados
             self.Tela_Selecionar_banco_de_dados()
@@ -149,8 +149,8 @@ Disciplina: Estatística"""
     # Menu > Selecione banco de dados
     def Tela_Selecionar_banco_de_dados(self):
         cls()
-        opt = self.Get_ArquivosNoDiretorio() + ['Voltar']
-        opt = opt[self.select.options(descrição="Selecione o banco de dados:", opções=opt)]
+        opções = self.Get_ArquivosNoDiretorio() + ['Voltar']
+        opt = opções[options(self.cabeçalho + "\n\nSelecione o banco de dados:", opções)]
         
         try:
             with open(opt,'r') as dados:
@@ -167,7 +167,7 @@ Disciplina: Estatística"""
                 self.dados.Titulo = titulo
                 
                 cls()
-                self.dados.Fonte = input(self.cabeçalho + "\n\n\nInsira a fonte dos dados:")
+                self.dados.Fonte = input(self.cabeçalho + "\n\n\nInsira a fonte dos dados: \n ")
                 cls()
         except:
             if opt == "Voltar":
@@ -179,9 +179,9 @@ Disciplina: Estatística"""
 
     def Tela_opções_dados(self):
         cls()
-        descrição = f"Área do Banco de dados: {self.dados.Titulo}\n\nSelecione a opção desejada:"
+        cabeçalho = self.cabeçalho + f"\n\n\nÁrea do Banco de dados: {self.dados.Titulo}\n\nSelecione a opção desejada:"
         opt = ["Mostrar Dados!!!","Medidas Gerais","Baixar Resultados","Histograma!!!","Editar Banco de dados","Voltar"]
-        opt = self.select.options(descrição=descrição,opções=opt)
+        opt = options(cabeçalho,opt)
 
         if opt == 0: # Mostrar Dados
 
@@ -229,9 +229,9 @@ Disciplina: Estatística"""
 
     def set_nome_usuario(self):
         self.nome_cliente = input(self.cabeçalho + "\n\n\n Digite seu nome:\n\n")
-        descrição = f"\n\n\nSeu nome é: {self.nome_cliente}?"
+        cabeçalho = self.cabeçalho + f"\n\n\nSeu nome é: {self.nome_cliente}?"
         opt = ["Sim","Corrigir","Sair"]
-        opt = self.select.options(descrição=descrição,opções=opt)
+        opt = options(cabeçalho,opt)
         cls()
         if opt == 2:
             self.Exit()
@@ -267,10 +267,10 @@ Disciplina: Estatística"""
         self.Tela_opções_dados()
 
     def Tela_Editar_Banco_Dados(self):
-        descrição = f"Tela de edição de dados\nBanco: {self.dados.Titulo}\n\nSelecione a opção desejada:"
+        cabeçalho = self.cabeçalho + f"\n\n\nTela de edição de dados\nBanco: {self.dados.Titulo}\n\nSelecione a opção desejada:\n"
 
         opt = ["Mostrar dados!!!","Adicionar Dados","Excluir Dados", "Alterar Título ou Fonte","Salvar como","Apagar Banco de dados!!!","Voltar"]
-        opt = self.select.options(descrição=descrição,opções=opt)
+        opt = options(cabeçalho,opt)
         
         if opt == 0: # Mostrar dados
             self.Mostrar_dados()
@@ -340,7 +340,7 @@ Disciplina: Estatística"""
         while True:
 
             opt = ['Voltar'] +  self.dados.dados
-            opt = self.select.options(opções=opt)
+            opt = options(cabeçalho,opt)
 
             if opt == 0:
                 break
